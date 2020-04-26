@@ -1,0 +1,234 @@
+<html>
+  
+  <!DOCTYPE html>
+
+  <head>
+      <meta charset ="UTF-8">
+      <title>Project Calculator</title>
+      <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+  <h1>Project: Calculator</h1>
+  <h2>Nick DiPreta</h2>
+  <h3>This project is a simple 4 function calculator. I will be implementing additional functionality over the coming weeks. The calculator supports sequential functions without needing to hit the equals sign! Typing is currently supported for numbers and backspacing only.</h3>
+  
+
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <div class = container>
+    <div class="parent">
+        <div class="div1">
+            <div class = displayz>
+                <div id = "fdisplay"></div>
+                
+            </div>
+        </div>
+        <div class="div2"> 
+            <div class = "numberz" id = "wrapper">
+              <button class = "btn"id = "7">7</button>
+              <button class = "btn"id = "8">8</button>
+              <button class = "btn"id = "9">9</button>
+              <button class = "btn"id = "4">4</button>
+              <button class = "btn"id = "5">5</button>
+              <button class = "btn"id = "6">6</button> 
+              <button class = "btn"id = "1">1</button>
+              <button class = "btn"id = "2">2</button>
+              <button class = "btn"id = "3">3</button>
+              <button class = "btn wider"id = "0">0</button>
+              <button class = "btn"id = ".">.</button>
+            </div>
+
+        </div>
+        <div class="div3">
+            <div class ="functionz" id = "fwrapper">
+                <button class = "functionbuttons" id = "+">+</button>    
+                <button class = "functionbuttons"id = "-">-</button>
+                <button class = "functionbuttons"id = "*">X</button>        
+                <button class = "functionbuttons"id = "/">/</button>   
+                <button class = "functionbuttons equal"id = "=">=</button>    
+                <button class = "functionbuttons clear"id = "C">C</button>
+ 
+            </div>
+        </div>
+        </div>
+      </div>
+</html>
+
+
+
+<script> 
+
+// Number wrapper , button display, button init
+
+
+var aCalculate = "";
+var bCalculate = "";
+var oCalculate;
+var mOperator ="";
+var solved = 0;
+var beta;
+var tempNum =0 ;
+
+
+// wrapper click listener
+const wrapper = document.getElementById('wrapper');
+wrapper.addEventListener('click', (event) => {
+  const isButton = event.target.nodeName === 'BUTTON';
+    if (!isButton) {
+      return;
+    }
+    if (aCalculate == "" || mOperator == ''){
+      if (tempNum != 0){
+        aCalculate = tempNum;
+        beta = event.target.id;
+        bCalculate += beta;
+        document.getElementById("fdisplay").innerHTML = bCalculate;
+      }
+    else{
+        var alpha = (event.target.id);
+        aCalculate += alpha;
+        console.log('A is')
+        console.log(aCalculate);
+        document.getElementById("fdisplay").innerHTML = aCalculate;}
+    }else{
+      beta = event.target.id;
+      bCalculate += beta;
+      document.getElementById("fdisplay").innerHTML = bCalculate;
+    }
+  })
+
+// function clicker  
+const fwrapper = document.getElementById('fwrapper');
+fwrapper.addEventListener('click', (event) => {
+    const isButton = event.target.nodeName === 'BUTTON';
+  if (!isButton) {
+    return;
+  }
+   var operation1 =  (event.target.id);
+   document.getElementById("fdisplay").innerHTML = operation1;
+   oCalculate = operation1.toString();
+   if (oCalculate !== "=" && oCalculate !== "C"){
+      if (aCalculate != "" && bCalculate !="" && solved == 0){
+    tempNum=operate(aCalculate,bCalculate,mOperator);
+     document.getElementById("fdisplay").innerHTML = tempNum;
+     mOperator = oCalculate;
+   aCalculate = "";
+   bCalculate = "";}
+   else{
+       mOperator = oCalculate;
+    document.getElementById("fdisplay").innerHTML = mOperator;}
+
+   }
+   else if (oCalculate == 'C'){
+    aCalculate = "";
+    bCalculate = "";
+    oCalculate = "";
+    mOperator ="";
+    solved = 0;
+    tempNum = 0;
+   }
+   else{
+     solved=operate(aCalculate,bCalculate,mOperator);
+     if (solved == 'Infinity'&& mOperator=='/'){document.getElementById("fdisplay").innerHTML = 'fuck you!';}
+     else{
+   document.getElementById("fdisplay").innerHTML = solved;}}
+   
+})
+
+document.addEventListener("keydown", function(event) {
+  a=event.which;
+  var inputKey = (String.fromCharCode(a));
+
+  if (aCalculate == "" || mOperator == ''){
+    if (tempNum != 0){
+      aCalculate = tempNum;
+      beta = event.target.id;
+      bCalculate += beta;
+  document.getElementById("fdisplay").innerHTML = bCalculate;
+    }
+    else{
+      if (inputKey == ""){
+     aCalculate = (aCalculate.slice(0,-1));
+     document.getElementById("fdisplay").innerHTML = aCalculate;
+     console.log(aCalculate.slice(0,-1));} 
+      else{
+        var alpha = inputKey;
+   aCalculate += alpha;
+   console.log('A is')
+   console.log(aCalculate);
+   document.getElementById("fdisplay").innerHTML = aCalculate;}}
+}else{
+  if (inputKey == ""){
+     bCalculate = (bCalculate.slice(0,-1));
+     document.getElementById("fdisplay").innerHTML = bCalculate;
+     console.log(bCalculate.slice(0,-1));} 
+      else{
+  beta = inputKey;
+  bCalculate += beta;
+  document.getElementById("fdisplay").innerHTML = bCalculate;
+}}
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function add (a,b) {
+	return parseFloat(a) + parseFloat(b);
+}
+
+function subtract (a,b) {
+	return parseFloat(a)-parseFloat(b);
+}
+
+function multiply (a,b) {
+	var total = parseFloat(a)*parseFloat(b);
+  return(total);
+	
+}
+
+
+function divide (a,b) {
+  var total = parseFloat(a)/parseFloat(b); 
+    
+  return(total);}
+
+function operate(a ,b, operand) {
+    if (arguments[2]== '+'){
+        return add(a,b);
+    }else if (arguments[2] == '-'){
+      return subtract(a,b);
+    }else if (arguments[2] == '*'){
+        return multiply(a,b);
+    }else if (arguments[2] == '/'){
+        return divide(a,b);
+    }}
+// }else if(
+//     }else if(arguments[2] == '*'){
+//         multiply(a,b);
+//     }else{
+//         divide(a,b);
+
+
+</script>
+
+
+
+<!-- else if (solved == 0 & bCalculate !=='') {
+  var aCalculate = operate(aCalculate,bCalculate,mOperator);
+  beta = event.target.id;
+  bCalculate += beta;
+  console.log(bCalculate);
+  document.getElementById("fdisplay").innerHTML = bCalculate;  -->
